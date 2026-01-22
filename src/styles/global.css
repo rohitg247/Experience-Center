@@ -1,0 +1,432 @@
+/* @import "tailwindcss"; */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* body {
+  background: lime;
+} */
+
+/* ============================================
+   THEME VARIABLES - NEW (Added at top)
+   ============================================ */
+
+/* Default Theme (Alt+1) - EXACTLY matches your old colors */
+:root {
+  --color-primary-50: #f0f1f8;
+  --color-primary-100: #e1e4f1;
+  --color-primary-200: #c3c8e3;
+  --color-primary-300: #a5add5;
+  --color-primary-400: #8791c7;
+  --color-primary-500: #191e4f;
+  --color-primary-600: #4b5a9b;
+  --color-primary-700: #3d4a7d;
+  --color-primary-800: #2f395f;
+  --color-primary-900: #212941;
+  --color-primary: var(--color-primary-500);
+  --color-primary-foreground: #ffffff;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-200: #fecaca;
+  --color-danger-300: #fca5a5;
+  --color-danger-400: #f87171;
+  --color-danger-500: #f21212;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #f21212;
+  --color-accent: var(--color-danger-500);
+  --color-danger-foreground: #ffffff;
+
+  --color-success: #10b981;
+  --color-success-foreground: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #000000;
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  --color-bg: #f9fafb;
+  --color-bg-secondary: #ffffff;
+  --color-text: #111827;
+  --color-text-light: #6b7280;
+  --color-border: #e5e7eb;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Blue-Yellow Theme (Alt+2) */
+[data-theme="blue-yellow"] {
+  --color-primary-500: #003D82;
+  --color-primary: var(--color-primary-500);
+  --color-primary-foreground: #ffffff;
+  --color-bg: #001f3f;
+  --color-bg-secondary: #002d5c;
+  --color-text: #ffffff;
+  --color-text-light: #b0c4de;
+  --color-border: #FFD700;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* Light Theme (Alt+3) */
+[data-theme="light"] {
+  --color-primary-500: #003D82;
+  --color-primary: var(--color-primary-500);
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f5f5f5;
+  --color-border: #d1d5db;
+  --color-shadow: rgba(0, 0, 0, 0.05);
+}
+
+/* Import Inter font locally for offline use */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/Inter-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/Inter-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/Inter-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/Inter-Bold.woff2') format('woff2');
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  
+/* background */
+  body {
+    @apply bg-gray-50 text-primary font-sans antialiased;
+    background-color: var(--color-bg) !important;
+    color: var(--color-text) !important;
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+    overflow: hidden; /* Prevent page scrolling */
+  }
+
+  html, body, #root {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-800 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-95;
+    color: var(--color-primary-foreground);
+  }
+
+  .btn-danger {
+    @apply bg-danger hover:bg-danger-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-95;
+    color: var(--color-danger-foreground);
+  }
+
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-primary border-2 border-gray-200 hover:border-primary-200 font-medium py-3 px-6 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md active:scale-95;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-200;
+  }
+
+  .device-card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-all duration-200;
+  }
+
+  .control-button {
+    @apply bg-gray-100 hover:bg-gray-200 text-primary font-medium py-2 px-4 rounded-md transition-all duration-150 active:scale-95 touch-manipulation;
+  }
+
+  .control-button.active {
+    @apply bg-primary text-white;
+  }
+
+  /* Rest stays exactly the same... */
+  .status-indicator {
+    @apply w-3 h-3 rounded-full flex-shrink-0;
+  }
+
+  .status-indicator.online {
+    @apply bg-success;
+  }
+
+  .status-indicator.offline {
+    @apply bg-gray-400;
+  }
+
+  .status-indicator.error {
+    @apply bg-danger;
+  }
+
+  .volume-level-green {
+    @apply text-success;
+  }
+
+  .volume-level-yellow {
+    @apply text-warning;
+  }
+
+  .volume-level-red {
+    @apply text-danger;
+  }
+
+  /* Custom scrollbar for modals only */
+  .modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(209, 213, 219) transparent;
+  }
+
+  .modal-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .modal-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .modal-content::-webkit-scrollbar-thumb {
+    background-color: rgb(209, 213, 219);
+    border-radius: 3px;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .touch-action-manipulation {
+    touch-action: manipulation;
+  }
+
+  .user-select-none {
+    user-select: none;
+  }
+}
+
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 20px 5px rgba(59, 130, 246, 0.8); }   /* blue */
+  50% { box-shadow: 0 0 30px 10px rgba(249, 115, 22, 0.8); } /* orange */
+  100% { box-shadow: 0 0 20px 5px rgba(59, 130, 246, 0.8); } /* back to blue */
+}
+
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slideUp {
+    animation: slideUp 0.6s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   LIGHTING CARD BACKGROUND ANIMATIONS
+   ============================================ */
+
+/* Base transition for card background */
+.device-card {
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================
+   1. WELCOME PRESET - Soft Primary Pulse Background
+   =========================================== */
+@keyframes softPulseBackground {
+  0%, 100% {
+    background-color: rgba(59, 130, 246, 0.05);
+    box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.1),
+                0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    background-color: rgba(59, 130, 246, 0.12);
+    box-shadow: inset 0 0 40px rgba(59, 130, 246, 0.2),
+                0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.lighting-welcome-active {
+  animation: softPulseBackground 2.5s ease-in-out infinite;
+}
+
+/* ============================================
+   2. PRESENTATION PRESET - Gradient Frame Fade-In on Card
+   =========================================== */
+/* Smooth Vertical Gradient Glow for Presentation */
+@keyframes verticalPulsePresentation {
+  0%, 100% {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 200, 150, 0.08),  /* very light orange at top */
+      rgba(255, 255, 255, 0.04),  /* soft white middle */
+      rgba(30, 64, 175, 0.12)     /* dark blue-gray bottom */
+    );
+    box-shadow: inset 0 4px 10px rgba(30, 64, 175, 0.08),
+                0 6px 12px -2px rgba(0, 0, 0, 0.12);
+  }
+  50% {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 200, 150, 0.12),
+      rgba(255, 255, 255, 0.08),
+      rgba(30, 64, 175, 0.18)
+    );
+    box-shadow: inset 0 4px 15px rgba(30, 64, 175, 0.15),
+                0 6px 14px -2px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Apply to presentation active card */
+.lighting-presentation-active {
+  animation: verticalPulsePresentation 3s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+/* ============================================
+   3. VIDEO CONFERENCE PRESET - Vertical Wipe Background
+   =========================================== */
+@keyframes verticalWipeBackground {
+  0% {
+    background: linear-gradient(
+      to bottom,
+      rgba(229, 231, 235, 0.8) 0%,
+      rgba(229, 231, 235, 0.8) 100%,
+      transparent 100%
+    );
+  }
+  100% {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(59, 130, 246, 0.08) 50%,
+      rgba(59, 130, 246, 0.12) 100%
+    );
+  }
+}
+
+.lighting-videoconf-active {
+  animation: verticalWipeBackground 0.5s ease-out forwards;
+}
+
+/* ============================================
+   4. MEETING PRESET - Subtle Scale-Pop Card
+   =========================================== */
+
+.lighting-meeting-active {
+  animation: scalePopCard 0.3s ease-out forwards;
+}
+
+/* ============================================
+   FADE-OUT TRANSITION FOR CARD BACKGROUND
+   =========================================== */
+.device-card:not(.lighting-welcome-active):not(.lighting-presentation-active):not(.lighting-videoconf-active):not(.lighting-meeting-active) {
+  background-color: transparent;
+  transition: all 0.5s ease-in-out;
+  /* animation: none; */
+}
+
+/* ============================================
+   YOUR EXISTING ANIMATIONS (Keep these)
+   =========================================== */
+
+        .animate-spin-slow {
+          animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        .animate-float-slow {
+          animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0);
+            opacity: 0.8;
+          }
+          50% {
+            transform: translateY(-10px);
+            opacity: 1;
+          }
+        }
+        .glow-circle {
+          animation: glow-color 6s ease-in-out infinite;
+        }
+
+        @keyframes glow-color {
+          0% {
+            box-shadow: 0 0 20px 5px rgba(93, 203, 247, 0.6),
+                        0 0 40px 10px rgba(93, 203, 247, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 15px 3px rgba(255, 165, 0, 0.4),
+                        0 0 25px 6px rgba(255, 165, 0, 0.3);
+          }
+          100% {
+            box-shadow: 0 0 20px 5px rgba(93, 203, 247, 0.6),
+                        0 0 40px 10px rgba(93, 203, 247, 0.4);
+          }
+        }

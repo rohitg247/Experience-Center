@@ -1,0 +1,92 @@
+// Centralized join number mappings
+export const DIGITAL_JOINS = {
+  // System Controls
+  SYSTEM_SHUTDOWN: 10,
+  SYSTEM_STARTUP: 11,
+  
+  // Room Selection
+  BOARDROOM_SELECT: 20,
+  TRAINING_ROOM_SELECT: 21,
+  COMBINED_ROOM_SELECT: 22,
+  
+  // Microphones
+  BOARDROOM_MIC: 30,
+  TRAINING_ROOM_MIC: 31,
+  MIC_COMBINED_CONTROL: 32,
+  
+  // Climate Control
+  BOARDROOM_AC_POWER: 40,
+  TRAINING_ROOM_AC_POWER: 41,
+  
+  // Lighting Presets
+  LIGHTS_WELCOME: 50,
+  LIGHTS_PRESENTATION: 51,
+  LIGHTS_VIDEO_CONF: 52,
+  LIGHTS_MEETING: 53,
+  LIGHTS_ALL_OFF: 54,
+  
+  // Display Controls
+  BOARDROOM_DISPLAY: 60,
+  TRAINING_DISPLAY: 61,
+  
+  // Source Selection
+  SOURCE_WIRELESS: 70,
+  SOURCE_BYOD: 71,
+  SOURCE_ZOOM: 72,
+  SOURCE_BLANK: 73,
+  
+  // Drapes Control
+  // DRAPES_UP: 80,
+  // DRAPES_DOWN: 81,
+  // DRAPES_STOP: 82,
+
+// Drapes Individual Controls
+DRAPES_LEFT_UP: 71,
+DRAPES_LEFT_STOP: 72,
+DRAPES_LEFT_DOWN: 73,
+DRAPES_CENTER_UP: 74,
+DRAPES_CENTER_STOP: 75,
+DRAPES_CENTER_DOWN: 76,
+DRAPES_RIGHT_UP: 77,
+DRAPES_RIGHT_STOP: 78,
+DRAPES_RIGHT_DOWN: 79,
+
+
+// Content Share
+  CONTENT_WIRELESS: 83,
+  CONTENT_BYOD: 84,
+  CONTENT_STOP: 85,
+};
+
+export const ANALOG_JOINS = {
+  // Temperature Control
+  BOARDROOM_TEMP: 100,
+  TRAINING_ROOM_TEMP: 101,
+  
+  // Audio Control
+  SPEAKER_VOLUME: 110,
+  
+  // Lighting Control
+  LIGHTS_BRIGHTNESS: 120,
+  
+  // Drapes Position
+  DRAPES_ALL: 130,
+  DRAPES_LEFT: 131,
+  DRAPES_CENTER: 132,
+  DRAPES_RIGHT: 133,
+  
+  // Shutdown Progress
+  SHUTDOWN_PROGRESS: 140
+};
+
+export const SERIAL_JOINS = {
+  // Status Displays
+  SYSTEM_STATUS: 200,
+  ROOM_STATUS: 201,
+  TEMPERATURE_DISPLAY: 202,
+  VOLUME_DISPLAY: 203,
+  TIME_DISPLAY: 204,
+  
+  // Error Messages
+  ERROR_MESSAGE: 210
+};

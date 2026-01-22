@@ -1,0 +1,38 @@
+{
+  "digital": {
+    "BOARDROOM_AC_POWER": false,
+    "TRAINING_ROOM_AC_POWER": false,
+    "LIGHTS_WELCOME": false,
+    "LIGHTS_PRESENTATION": false,
+    "LIGHTS_VIDEO_CONF": false,
+    "LIGHTS_MEETING": false,
+    "LIGHTS_ALL_OFF": false,
+    "BOARDROOM_MIC": false,
+    "TRAINING_ROOM_MIC": false,
+    "MIC_COMBINED_CONTROL": false,
+    "SYSTEM_SHUTDOWN": false,
+    "SYSTEM_STARTUP": false,
+    "BOARDROOM_SELECT": false,
+    "TRAINING_ROOM_SELECT": false,
+    "COMBINED_ROOM_SELECT": false
+  },
+  "analog": {
+    "BOARDROOM_TEMP": 72,
+    "TRAINING_ROOM_TEMP": 72,
+    "LIGHTS_BRIGHTNESS": 32768,
+    "SPEAKER_VOLUME": 32768,
+    "DRAPES_ALL": 0,
+    "DRAPES_LEFT": 0,
+    "DRAPES_CENTER": 0,
+    "DRAPES_RIGHT": 0,
+    "SHUTDOWN_PROGRESS": 0
+  },
+  "serial": {
+    "SYSTEM_STATUS": "OK",
+    "ROOM_STATUS": "Combined",
+    "TEMPERATURE_DISPLAY": "72°F",
+    "VOLUME_DISPLAY": "50%",
+    "TIME_DISPLAY": "12:00 PM",
+    "ERROR_MESSAGE": ""
+  }
+}
