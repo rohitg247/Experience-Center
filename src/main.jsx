@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 import './styles/global.css';
+import { crestronInitManager } from './utils/crestronInitManager';
 
 // ✅ Import Crestron libraries
 import * as WebXPanelModule from '@crestron/ch5-webxpanel';
@@ -33,65 +34,110 @@ console.log(`- Running on: ${window.location.hostname}`);
 console.log(`- User Agent:`, navigator.userAgent);
 console.log(`- runsInContainerApp:`, WebXPanelModule.runsInContainerApp());
 
-// --- Core Initialization Logic ---
-const initializeCrestron = () => {
-  console.log('🔧 Initializing Crestron environment...');
+// --- Async WebXPanel Initialization with Timeout ---
+const initializeWebXPanelAsync = () => {
+  return new Promise((resolve, reject) => {
+    const isDevelopment = (
+      window.location.hostname === '127.0.0.1' ||
+      window.location.protocol === 'file:' ||
+      (window.location.hostname === 'localhost' && window.location.port === '3000')
+    );
 
-  // 🔥 FIXED: Better detection for production vs development
-  const isDevelopment = (
-    window.location.hostname === '127.0.0.1' || 
-    window.location.protocol === 'file:' ||
-    (window.location.hostname === 'localhost' && window.location.port === '3000')
-  );
+    const isInContainerApp = WebXPanelModule.runsInContainerApp();
 
-  // 🔥 CRITICAL: Check if running in Crestron container app (mobile/touch panel)
-  const isInContainerApp = WebXPanelModule.runsInContainerApp();
+    console.log(`📊 Environment Detection:`);
+    console.log(`  - isDevelopment: ${isDevelopment}`);
+    console.log(`  - isInContainerApp: ${isInContainerApp}`);
+    console.log(`  - isActive: ${isActive}`);
 
-  console.log(`📊 Environment Detection:`);
-  console.log(`  - isDevelopment: ${isDevelopment}`);
-  console.log(`  - isInContainerApp: ${isInContainerApp}`);
-  console.log(`  - isActive: ${isActive}`);
+    // Development or Container App: Skip WebXPanel init
+    if (isDevelopment || isInContainerApp) {
+      if (isInContainerApp) {
+        console.log('✅ Container app detected - using native bridge');
+      } else {
+        console.warn('⚠️ Development mode - skipping WebXPanel init');
+      }
+      resolve();
+      return;
+    }
 
-  // Initialize WebXPanel if NOT in development AND NOT in container app
-  if (!isDevelopment && !isInContainerApp) {
-    console.log('✅ WebXPanel environment detected. Initializing WebXPanel...');
+    // Production WebXPanel initialization
+    console.log('✅ WebXPanel environment detected. Initializing...');
 
     const configuration = {
       host: window.location.hostname,
       ipId: '0x03',
       roomId: '',
+      domain: '*', // 🔥 CRITICAL FIX: Add domain for cross-origin
     };
 
     try {
-      WebXPanel.initialize(configuration);
-      console.log('✅ WebXPanel initialized successfully with config:', configuration);
+      let isConnected = false;
+      const timeoutDuration = 10000; // 10 second timeout
 
+      // Set timeout for initialization
+      const timeoutId = setTimeout(() => {
+        if (!isConnected) {
+          console.warn('⚠️ WebXPanel initialization timeout - proceeding anyway');
+          resolve(); // Resolve anyway, allow app to start
+        }
+      }, timeoutDuration);
+
+      // Listen for connection
       WebXPanel.addEventListener(WebXPanelEvents.CONNECT_CIP, ({ detail }) => {
         console.log('🟢 CONNECTED to Crestron Processor:', detail);
+        isConnected = true;
+        clearTimeout(timeoutId);
+        resolve();
+      });
+
+      // Listen for errors
+      WebXPanel.addEventListener(WebXPanelEvents.ERROR, ({ detail }) => {
+        console.error('❌ WebXPanel ERROR:', detail);
+        // Don't reject - allow app to start even with connection issues
+        if (!isConnected) {
+          clearTimeout(timeoutId);
+          resolve(); // Resolve to allow app to start
+        }
       });
 
       WebXPanel.addEventListener(WebXPanelEvents.DISCONNECT_CIP, ({ detail }) => {
         console.warn('🔴 DISCONNECTED from Crestron Processor:', detail);
       });
 
-      WebXPanel.addEventListener(WebXPanelEvents.ERROR, ({ detail }) => {
-        console.error('❌ WebXPanel ERROR:', detail);
-      });
+      // Initialize WebXPanel
+      WebXPanel.initialize(configuration);
+      console.log('✅ WebXPanel.initialize() called with config:', configuration);
 
     } catch (error) {
       console.error('❌ Critical error initializing WebXPanel:', error);
+      reject(error);
     }
+  });
+};
 
-  } else if (isInContainerApp) {
-    console.log('📱 Crestron ONE / Touch Panel detected. Using native bridge communication.');
-    console.log('✅ Bridge functions ready for native app communication.');
-    
-  } else {
-    console.warn('⚠️ Development environment detected. Skipping WebXPanel initialization.');
-    console.log('💡 Tip: Use mock joins or connect to a test processor for development.');
+// --- Core Initialization Logic ---
+const initializeCrestron = async () => {
+  try {
+    console.log('🔧 Starting Crestron initialization...');
+    crestronInitManager.setInitializing();
+
+    // Wait for WebXPanel to initialize
+    await initializeWebXPanelAsync();
+
+    console.log('✅ Crestron initialization complete');
+    crestronInitManager.setInitialized();
+
+    // Render app after initialization
+    renderApp();
+
+  } catch (error) {
+    console.error('❌ Crestron initialization failed:', error);
+    crestronInitManager.setError(error);
+
+    // Still render app to show error screen
+    renderApp();
   }
-
-  renderApp();
 };
 
 // --- React Rendering Logic ---

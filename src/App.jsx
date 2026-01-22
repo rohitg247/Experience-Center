@@ -1,15 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { isActive } from "@crestron/ch5-webxpanel";
 import {
   MemoryRouter,
   Routes,
   Route,
+  useLocation,
+  useNavigate,
 } from "react-router-dom";
 
 import Navbar from "./components/layout/Navbar";
 import ShutdownScreen from "./components/ShutdownScreen";
 import ShutdownModal from "./components/modals/ShutdownModal";
 import ClimateLightingModal from "./components/modals/ClimateLightingModal";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Import room header components
 import CombinedRoom, { CombinedRoomHeader } from "./pages/CombinedRoom";
@@ -20,18 +23,13 @@ import TrainingRoom, { TrainingRoomHeader } from "./pages/TrainingRoom";
 import Modal from "./components/ui/Modal";
 import MicrophoneControl from "./components/devices/MicrophoneControl";
 import DrapesControl from "./components/devices/DrapesControl";
-
 import LandingPage from "./pages/LandingPage";
 import ZoomMeeting from "./pages/ZoomMeeting";
 
 // --- Helper Component to manage Navbar and Page Content ---
-import { useLocation, useNavigate } from "react-router-dom";
-import { useCallback } from "react";
-
 const ContentWrapper = ({ children, onShutdown }) => {
   const location = useLocation();
   const navigate = useNavigate();
-
   const [previousPage, setPreviousPage] = useState(null);
 
   // Track last non-settings page
@@ -58,10 +56,8 @@ const ContentWrapper = ({ children, onShutdown }) => {
 
   const openMicModal = useCallback(() => setIsMicModalOpen(true), []);
   const closeMicModal = useCallback(() => setIsMicModalOpen(false), []);
-
   const openDrapesModal = useCallback(() => setIsDrapesModalOpen(true), []);
   const closeDrapesModal = useCallback(() => setIsDrapesModalOpen(false), []);
-
   const openClimateModal = useCallback(() => setIsClimateModalOpen(true), []);
   const closeClimateModal = useCallback(() => setIsClimateModalOpen(false), []);
 
@@ -200,7 +196,8 @@ const ContentWrapper = ({ children, onShutdown }) => {
   );
 };
 
-function App() {
+// Separate AppContent component
+const AppContent = () => {
   const [showShutdown, setShowShutdown] = useState(false);
   const [showShutdownModal, setShowShutdownModal] = useState(false);
 
@@ -238,59 +235,68 @@ function App() {
   };
 
   return (
-    <MemoryRouter initialEntries={["/"]}>
-      <div className="h-screen w-screen overflow-hidden bg-gray-50 flex flex-col">
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
+    <div className="h-screen w-screen overflow-hidden bg-gray-50 flex flex-col">
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
 
-          <Route
-            path="/boardroom"
-            element={
-              <ContentWrapper onShutdown={handleShutdownClick}>
-                <Boardroom />
-              </ContentWrapper>
-            }
-          />
-          <Route
-            path="/training-room"
-            element={
-              <ContentWrapper onShutdown={handleShutdownClick}>
-                <TrainingRoom />
-              </ContentWrapper>
-            }
-          />
-          <Route
-            path="/combined-room"
-            element={
-              <ContentWrapper onShutdown={handleShutdownClick}>
-                <CombinedRoom />
-              </ContentWrapper>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ContentWrapper onShutdown={handleShutdownClick}>
-                <Settings />
-              </ContentWrapper>
-            }
-          />
-
-          <Route path="/zoom-meeting" element={<ZoomMeeting />} />
-        </Routes>
-
-        <ShutdownModal
-          isOpen={showShutdownModal}
-          onConfirm={handleShutdownConfirm}
-          onCancel={handleShutdownCancel}
+        <Route
+          path="/boardroom"
+          element={
+            <ContentWrapper onShutdown={handleShutdownClick}>
+              <Boardroom />
+            </ContentWrapper>
+          }
+        />
+        <Route
+          path="/training-room"
+          element={
+            <ContentWrapper onShutdown={handleShutdownClick}>
+              <TrainingRoom />
+            </ContentWrapper>
+          }
+        />
+        <Route
+          path="/combined-room"
+          element={
+            <ContentWrapper onShutdown={handleShutdownClick}>
+              <CombinedRoom />
+            </ContentWrapper>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ContentWrapper onShutdown={handleShutdownClick}>
+              <Settings />
+            </ContentWrapper>
+          }
         />
 
-        <ShutdownScreen
-          isVisible={showShutdown}
-          onComplete={handleShutdownComplete}
-        />
-      </div>
-    </MemoryRouter>
+        <Route path="/zoom-meeting" element={<ZoomMeeting />} />
+      </Routes>
+
+      <ShutdownModal
+        isOpen={showShutdownModal}
+        onConfirm={handleShutdownConfirm}
+        onCancel={handleShutdownCancel}
+      />
+
+      <ShutdownScreen
+        isVisible={showShutdown}
+        onComplete={handleShutdownComplete}
+      />
+    </div>
+  );
+};
+
+// Main App component with ErrorBoundary wrapper
+function App() {
+  return (
+    <ErrorBoundary>
+      <MemoryRouter initialEntries={["/"]}>
+        <AppContent />
+      </MemoryRouter>
+    </ErrorBoundary>
   );
 }
 
